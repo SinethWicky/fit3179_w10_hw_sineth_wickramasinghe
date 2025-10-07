@@ -1,0 +1,28 @@
+Group,Age,Place,Value
+All,Total,Public space,63.0
+All,Total,Home environment,29.7
+All,Total,Gym/fitness club/sports/leisure centre,28.6
+All,Total,Free community facilities,22.4
+All,Total,Sports club or association facilities,20.0
+All,Total,Private or commercial premises,16.2
+All,Total,Recreation club or association facilities,10.0
+All,Total,Educational institution facilities,6.9
+All,Total,Workplace,6.4
+Males,Total,Public space,61.1
+Males,Total,Home environment,28.7
+Males,Total,Gym/fitness club/sports/leisure centre,27.4
+Males,Total,Free community facilities,22.7
+Males,Total,Sports club or association facilities,26.0
+Males,Total,Private or commercial premises,13.7
+Males,Total,Recreation club or association facilities,11.6
+Males,Total,Educational institution facilities,7.8
+Males,Total,Workplace,7.0
+Females,Total,Public space,64.9
+Females,Total,Home environment,30.5
+Females,Total,Gym/fitness club/sports/leisure centre,29.8
+Females,Total,Free community facilities,22.1
+Females,Total,Sports club or association facilities,14.4
+Females,Total,Private or commercial premises,18.6
+Females,Total,Recreation club or association facilities,8.6
+Females,Total,Educational institution facilities,6.0
+Females,Total,Workplace,5.6
