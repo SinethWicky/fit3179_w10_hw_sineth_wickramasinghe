@@ -21,7 +21,7 @@
   </style>
 </head>
 <body>
-  <h1>Physical Activity in Victoria</h1>
+  <h1>FIT3179 Homework Task 10</h1>
 
   <div id="chart1" class="chart"></div>
   <div id="chart2" class="chart"></div>
@@ -50,62 +50,81 @@
   "transform": [
     {"filter": "datum.Group == ageGroup"}
   ],
-  "mark": "bar",
-  "encoding": {
-    "x": {
-      "field": "Motivation",
-      "type": "ordinal",
-      "sort": "-y",
-      "axis": {"labelAngle": -40, "title": "Motivation"}
+  "layer": [
+    {
+      "mark": "bar",
+      "encoding": {
+        "x": {"field": "Motivation", "type": "ordinal", "sort": "-y", "axis": {"labelAngle": -40, "title": "Motivation"}},
+        "y": {"field": "Value", "type": "quantitative", "title": "Proportion of Participants (%)"},
+        "color": {"field": "Motivation", "type": "nominal", "scale": {"scheme": "category20"}, "legend": null},
+        "tooltip": [
+          {"field": "Motivation", "type": "ordinal"},
+          {"field": "Value", "type": "quantitative"}
+        ]
+      }
     },
-    "y": {
-      "field": "Value",
-      "type": "quantitative",
-      "title": "Proportion of Participants (%)"
+    {
+      "mark": {"type": "rule", "color": "red", "strokeWidth": 2},
+      "transform": [
+        {"aggregate": [{"op": "average", "field": "Value", "as": "avgValue"}]}
+      ],
+      "encoding": {
+        "y": {"field": "avgValue", "type": "quantitative"}
+      }
     },
-    "tooltip": [
-      {"field": "Motivation", "type": "ordinal"},
-      {"field": "Value", "type": "quantitative"}
-    ],
-    "color": {
-      "field": "Motivation",
-      "type": "nominal",
-      "scale": {"scheme": "category20"},
-      "legend": null
+    {
+      "mark": {"type": "text", "align": "left", "dx": 5, "dy": -5, "color": "red"},
+      "transform": [
+        {"aggregate": [{"op": "average", "field": "Value", "as": "avgValue"}]}
+      ],
+      "encoding": {
+        "y": {"field": "avgValue", "type": "quantitative"},
+        "x": {"value": 0},
+        "text": {"value": "Average"}
+      }
     }
-  }
+  ]
 };
 
+
     // Chart 2: Activity Locations by Gender
-    const activitySpec = {
-      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "width": 800,
-      "height": 400,
-      "title": "Participation in Physical Activity by Location and Gender - Victoria",
+    const RocketLaunch = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 450,
+  "title": "Global Locations of Rocket Launch Pads",
+  "projection": {"type": "equalEarth"},
+  "layer": [
+    {
       "data": {
-        "url": "https://raw.githubusercontent.com/SinethWicky/fit3179_w10_hw_sineth_wickramasinghe/refs/heads/main/activity_locations_tidy_vic.csv",
-        "format": {"type": "csv"}
+        "url": "https://raw.githubusercontent.com/vega/vega-datasets/main/data/world-110m.json",
+        "format": {"type": "topojson", "feature": "countries"}
       },
-      "transform": [
-        {"filter": "datum.Group === 'Males' || datum.Group === 'Females'"}
-      ],
-      "selection": {
-        "highlightGender": {"type": "multi", "fields": ["Group"], "bind": "legend"}
+      "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "white"}
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/SinethWicky/fit3179_w9_hw/main/rocket_launch_site_elevation_2019-10-27.csv"
       },
-      "mark": {"type": "bar"},
+      "mark": "circle",
       "encoding": {
-        "x": {"field": "Place", "type": "ordinal", "axis": {"labelAngle": -45}},
-        "y": {"field": "Value", "type": "quantitative"},
-        "color": {"field": "Group", "type": "nominal", "title": "Gender", "scale": {"scheme": "category10"}},
-        "xOffset": {"field": "Group"},
-        "opacity": {"condition": {"selection": "highlightGender", "value": 1}, "value": 0.3},
-        "tooltip": [{"field": "Place"}, {"field": "Value"}, {"field": "Group"}]
+        "longitude": {"field": "Longitude", "type": "quantitative"},
+        "latitude": {"field": "Latitude", "type": "quantitative"},
+        "size": {"field": "Elevation", "type": "quantitative", "title": "Elevation (m)"},
+        "color": {"field": "Region", "type": "nominal"},
+        "tooltip": [
+          {"field": "Country"},
+          {"field": "Region"},
+          {"field": "Elevation"}
+        ]
       }
-    };
+    }
+  ]
+};
 
     // Embed the charts
     vegaEmbed('#chart1', motivationSpec);
-    vegaEmbed('#chart2', activitySpec);
+    vegaEmbed('#chart2', RocketLaunch);
   </script>
 </body>
 </html>
