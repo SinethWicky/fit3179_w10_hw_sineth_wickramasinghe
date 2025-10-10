@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Physical Activity Visualisations - Victoria</title>
+  <!-- Include Vega, Vega-Lite, and Vega-Embed -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .chart {
+      margin: 30px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>FIT3179 Homework Task 10</h1>
+
+  <div id="chart1" class="chart"></div>
+  <div id="chart2" class="chart"></div>
+
+  <script>
+    // Chart 1: Motivation for participation
+    const motivationSpec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Sources of Motivation for Engagement in Physical Activity - Victoria",
+  "width": 700,
+  "height": 450,
+  "data": {
+    "url": "https://raw.githubusercontent.com/SinethWicky/fit3179_w10_hw_sineth_wickramasinghe/refs/heads/main/motivation_tidy_vic.csv"
+  },
+  "params": [
+    {
+      "name": "ageGroup",
+      "value": "All",
+      "bind": {
+        "input": "select",
+        "options": ["All", "15-17", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"],
+        "labels": ["All", "15–17", "18–24", "25–34", "35–44", "45–54", "55–64", "65+"]
+      }
+    }
+  ],
+  "transform": [
+    {"filter": "datum.Group == ageGroup"}
+  ],
+  "layer": [
+    {
+      "mark": "bar",
+      "encoding": {
+        "x": {"field": "Motivation", "type": "ordinal", "sort": "-y", "axis": {"labelAngle": -40, "title": "Motivation"}},
+        "y": {"field": "Value", "type": "quantitative", "title": "Proportion of Participants (%)"},
+        "color": {"field": "Motivation", "type": "nominal", "scale": {"scheme": "category20"}, "legend": null},
+        "tooltip": [
+          {"field": "Motivation", "type": "ordinal"},
+          {"field": "Value", "type": "quantitative"}
+        ]
+      }
+    },
+    {
+      "mark": {"type": "rule", "color": "red", "strokeWidth": 2},
+      "transform": [
+        {"aggregate": [{"op": "average", "field": "Value", "as": "avgValue"}]}
+      ],
+      "encoding": {
+        "y": {"field": "avgValue", "type": "quantitative"}
+      }
+    },
+    {
+      "mark": {"type": "text", "align": "left", "dx": 5, "dy": -5, "color": "red"},
+      "transform": [
+        {"aggregate": [{"op": "average", "field": "Value", "as": "avgValue"}]}
+      ],
+      "encoding": {
+        "y": {"field": "avgValue", "type": "quantitative"},
+        "x": {"value": 0},
+        "text": {"value": "Average"}
+      }
+    }
+  ]
+};
+
+
+    // Chart 2: Activity Locations by Gender
+    const RocketLaunch = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 450,
+  "title": "Global Locations of Rocket Launch Pads",
+  "projection": {"type": "equalEarth"},
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/vega/vega-datasets/main/data/world-110m.json",
+        "format": {"type": "topojson", "feature": "countries"}
+      },
+      "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "white"}
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/SinethWicky/fit3179_w9_hw/main/rocket_launch_site_elevation_2019-10-27.csv"
+      },
+      "mark": "circle",
+      "encoding": {
+        "longitude": {"field": "Longitude", "type": "quantitative"},
+        "latitude": {"field": "Latitude", "type": "quantitative"},
+        "size": {"field": "Elevation", "type": "quantitative", "title": "Elevation (m)"},
+        "color": {"field": "Region", "type": "nominal"},
+        "tooltip": [
+          {"field": "Country"},
+          {"field": "Region"},
+          {"field": "Elevation"}
+        ]
+      }
+    }
+  ]
+};
+
+    // Embed the charts
+    vegaEmbed('#chart1', motivationSpec);
+    vegaEmbed('#chart2', RocketLaunch);
+  </script>
+</body>
+</html>
